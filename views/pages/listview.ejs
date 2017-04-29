@@ -30,6 +30,15 @@ $http.get('/listviewData').success(function(response){
   $scope.data=response.data;
   console.log(response);  
 })
+$scope.greaterthan=function(val){
+  if(val!=undefined){
+  return function(item){
+      return item.count >= val;
+    }
+
+  }
+
+}
 $scope.getURL = function(item){
   //console.log("item");
 imagesRef.child(item).getDownloadURL().then(function(url){
@@ -59,7 +68,7 @@ $scope.getData=function(item){
 
 <style type="text/css">
       html { height: 100% }
-      body { font-family: "Lato", sans-serif;height: 100%; margin: 0; padding: 0 }
+      body { font-family: "Lato", sans-serif;height: 100%; margin: 0; padding: 0;background: brown !important }
       
       #button {width:45%;}
       #newDiv {
@@ -76,10 +85,14 @@ $scope.getData=function(item){
     </style>
 <% include template %>
 </head>
-<body  ng-app="myApp" ng-controller="datacontroller">
-<span id="myspan" style="font-size:20px;cursor:pointer" onclick="myFunction()" >&#9776;&nbsp&nbspThe Dumping Hot Spots are:
- </span>
-<div class="container" class="panel-group" ng-repeat="d in data" Style="margin-top: 10px;">
+<body   id="body"  ng-app="myApp" ng-controller="datacontroller">
+<h3 style="color:gold;">The Dumping Hot Spots are:
+ </h3>
+<br></br>
+<font color="gold"> </font><input type="text" placeholder="Search List by City" ng-model="searchtext.city"/>
+<font color="gold"> </font><input type="text" placeholder="Search List by count" ng-model="searchtext.count"/>
+<br></br>
+<div class="container" style="cursor:pointer" class="panel-group" ng-repeat="d in data|filter:searchtext.city|filter:greaterthan(searchtext.count)" Style="margin-top: 10px;">
 
  <div class="panel panel-default" >
   <div id="button"  class="panel-body" data-toggle="collapse" data-target="#i-{{$index}}">{{d.Address}}-----{{d.count}}</div>
@@ -89,15 +102,7 @@ $scope.getData=function(item){
 
  </div>
  
-    <div class="col-md-6">
-    <div class="panel panel-default">
-    <button type="button" id="main" class="panel-heading" data-toggle="collapse" data-target="#m-{{$index}}">The Location's</button>
-  <div id="m-{{$index}}" class="collapse panel-heading">
-    .......Cordinates are  {{d.Latitude}} , {{d.Longitude}}
     
-  </div>   
-  </div>  
-</div>
 </div>
 </div>
 </div>
